@@ -20,8 +20,8 @@
               <td>{{i['symbol']}}</td>
               <td>{{i['stock']}}</td>
               <td>{{i['amount']}}</td>
-              <td>{{i['price']}}</td>
-              <td>{{ (i['price'] * i['amount']) | usd }}</td>
+              <td>{{ ((i['symbol'] | lookup ) ['price']) }}</td>
+              <td>{{( ( (i['symbol'] | lookup)  ['price']) * i['amount'] )| usd }}</td>
           </tr>
       {% endfor %}
       <tr>

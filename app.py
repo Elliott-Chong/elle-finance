@@ -28,6 +28,7 @@ def after_request(response):
 
 # Custom filter
 app.jinja_env.filters["usd"] = usd
+app.jinja_env.filters['lookup'] = lookup
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_FILE_DIR"] = mkdtemp()
@@ -51,8 +52,9 @@ def index():
     stocks=db.execute("SELECT * FROM stocks WHERE user_id = ?", id)
     total=float(cash)
     for i in stocks:
-        total+=i['amount'] * i['price']
-    return render_template('index.html', stocks=stocks, cash=cash, total=total)
+        total += i['amount'] * lookup(i['symbol'])['price']
+
+    return render_template('index.html', stocks=stocks, cash=cash, total=total, lookup=lookup)
 
 
 @app.route("/buy", methods=["GET", "POST"])
